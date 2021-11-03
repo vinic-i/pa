@@ -1,0 +1,33 @@
+1. Seja o seguinte trecho de programa:
+----------------
+| int i=3,j=5; |
+| int *p, *q;  |
+| p = &i;      |
+| q = &j;      |
+----------------
+Determine o valor das seguintes expressões:
+         
+Valor da expressão (p == &i)
+true | 1
+
+Valor da expressão (*p - *q)
+-2
+
+Valor da expressão (**&p)
+&p iria retornar o endereço da variável p, 
+*&p iria retornar o conteúdo que está guardado
+no endereço da variável p, que nesse caso seria
+o endereço da variável i, com isso, podemos afirmar
+que a expressão final, **&p, irá retornoar o conteúdo
+do endereço de memória da variável i, que é: 3 
+
+Valor da expressão (3 - *p/(*q) + 7)
+*p = 3, *q = 5, portanto, a expressão calculada é:
+3-(3/5)+7
+Como o tipo das variáveis são inteiro, o resultado da
+divisão de 3/5 que deveria ser 0.6, será 0, sabendo disso
+o resultado final retornado pela expressão será 10 (3-0+7)
+
+
+
+
