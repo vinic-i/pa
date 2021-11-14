@@ -1,0 +1,14 @@
+3 - Se i e j são variáveis inteiras e p e q ponteiros para int, quais das seguintes expressões de
+atribuição são ilegais?
+
+Fundamentos para as respostoas: As operações permitidas com ponteiros são as de incremento e
+decremento com valores inteiros
+
+p = i            --> É ilegal porque p é um ponteiro e deve receber endereço não valor em si
+q = &j           --> É legal
+p = &*&i;        --> É legal porque pega o endereço do conteúdo do endereço de i, e ponteiros guardam endereço
+i = (*&)j;       --> Ilegal
+i = *&j;         --> Legal
+i = *&*&j;       --> Legal, no final é só o valor de j
+q = *p;          --> Ilegal, porque está passando o conteúdo do endereço guardado em p para o ponteiro q
+i = (*p)++ + *q; --> É legal, apenas um incremento no ponteiro p mas um q
