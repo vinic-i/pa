@@ -1,0 +1,18 @@
+8. O que fazem os seguintes programas em C?
+int main(){
+  int vet[] = {4,9,13};
+  int i;
+  for(i=0;i<3;i++){
+  printf("%d ",*(vet+i));
+  }
+}
+Imprime o vetor vet a partir do conteúdo das sua posições
+----------------------------------------------------------
+int main(){
+  int vet[] = {4,9,13};
+  int i;
+  for(i=0;i<3;i++){
+  printf("%X ",vet+i);
+  }
+}
+Imprime os endereços de cada posição do vetor
