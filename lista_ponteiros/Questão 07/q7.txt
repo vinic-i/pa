@@ -1,0 +1,6 @@
+7. Considerando a declaração int mat[4], *p, x;, quais das seguintes expressões são válidas?
+Justifique.
+p = mat + 1; // É válida, pega a segunda posição do vetor mat
+p = mat++; // Não é válida
+p = ++mat; // Não é válida
+x = (*mat)++; // É válida, pega a primeira posição do vetor mat
