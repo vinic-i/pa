@@ -1,0 +1,22 @@
+11. Suponha que as seguintes declarações tenham sido realizadas:
+float aloha[10], coisas[10][5], *pf, value = 2.2;
+int i=3;
+Identifique quais dos seguintes comandos é válido ou inválido:
+
+aloha[2] = value; // É válido, só adicionando um número no vetor em uma posição específica
+
+scanf("%f", &aloha);  // é válida no sentido do compilador não reclamar, mas não sei exatamente o que faz
+meu primeiro palpite era que escrevia na primeira posição do vetor, mas observando junto ao printf da linha 14, percebi que não era isso
+
+aloha = value";  // inválido, pois é um array recendo um valor sem especificar a posição, 
+e também tem umas aspas soltas aqui que acredito que tenha sido erro de digitação
+
+printf("%f", aloha); // válido, deve mostrar o endereço da primeira posição do vetor representada com número float 
+
+coisas[4][4] = aloha[3]; // válido, pega o valor da posição 3 e coloca na posição 4x4 da matrix
+
+coisas[5] = aloha; // inválido porque está passando um vetor inteiro (aloha) para uma posição só de outro vetor (coisas[5])
+
+pf = value; // inválido porque pf é um ponteiro e deve receber um endereço e não um valor diretamente
+
+pf = aloha; // sintaxe válida, o ponteiro pega a primeira posição do array
