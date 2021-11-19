@@ -1,0 +1,6 @@
+  printf("\ni = %d",i); -> indica o número do 'i' para laço do for que ta sendo processado no momento.
+  printf("vet[%d] = %.1f",i, vet[i]); -> Indica qual elemento do vetor "vet" está sendo executado no momento "=" ao conteudo daquela posição.
+  printf("*(f + %d) = %.1f",i, *(f+i)); -> Nessa linha, ele mostra o conteúdo do ponteiro "f" em casa posição do vetor. Por exemplo, se o for está "i=0" ele irá mostrar o primeiro elemento, e assim sucessivamente.
+  printf("&vet[%d] = %X",i, &vet[i]); -> Mostra o endereço em que o vetor "vet" está apontando no momento. 
+  printf("(f + %d) = %X",i, f+i); -> Nesse printf, ele vai incrementando o endereço do ponteiro "f" que seria o mesmo de ir percorrendo o vetor "vet". Apesar do for incrementar de 1 em 1, o endereço incrementa de 4 em 4, pois o float ocupa 4 bytes na memória.
+
