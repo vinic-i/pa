@@ -12,10 +12,10 @@ Sculptor::Sculptor(int x, int y, int z)
     ny = y;
     nz = z;
     //inicializando cores/alpha
-    r = 1;
-    g = 1;
-    b = 1;
-    a = 0.7;
+    r = 0;
+    g = 0;
+    b = 0;
+    a = 0;
     //preenchendo todos os voxeis com isOn = false para que não apareçam
     //alocação de memoria
     v = new Voxel **[nx];
@@ -58,12 +58,121 @@ void Sculptor::setColor(float r1, float g1, float b1, float a1)
 
 void Sculptor::putVoxel(int x, int y, int z)
 {
+    if (x < 0)
+        x = 0;
+    if (x > nx)
+        x = nx - 1;
+    if (y < 0)
+        y = 0;
+    if (y > ny)
+        y = ny - 1;
+    if (z < 0)
+        z = 0;
+    if (z > nz)
+        z = nz - 1;
     //coloca um voxel na posição passada (x,y,z) passando os valores de rgba atual e setando isOn verdadeiro
     v[x][y][z].r = r;
     v[x][y][z].g = g;
     v[x][y][z].b = b;
     v[x][y][z].a = a;
     v[x][y][z].isOn = true;
+}
+
+void Sculptor::cutVoxel(int x, int y, int z)
+{
+    //coloca um voxel na posição passada (x,y,z) passando os valores de rgba atual e setando isOn verdadeiro
+    v[x][y][z].isOn = false;
+}
+
+// Ativa todos os voxels que satisfazem à equação da esfera e atribui aos mesmos a cor atual de desenho  (r,g,b,a)
+// Equação da esfera = x²+y²+z²≤r²
+void Sculptor::putSphere(int xcenter, int ycenter, int zcenter, int radius)
+{
+    int aux = 0;
+    int firstPartEquation = 0;
+    for (int i = 1; i <= nx; i++)
+    {
+        for (int j = 1; j <= ny; j++)
+        {
+            for (int k = 0; k <= nz; k++)
+            {
+                firstPartEquation = pow(xcenter - i, 2) + pow(ycenter - j, 2) + pow(zcenter - k, 2);
+                if (firstPartEquation <= pow(radius, 2))
+                {
+                    v[i][j][k].r = r;
+                    v[i][j][k].g = g;
+                    v[i][j][k].b = b;
+                    v[i][j][k].a = a;
+                    v[i][j][k].isOn = true;
+                }
+            }
+        }
+    }
+}
+
+void Sculptor::cutSphere(int xcenter, int ycenter, int zcenter, int radius)
+{
+    int aux = 0;
+    int firstPartEquation = 0;
+    for (int i = 1; i <= nx; i++)
+    {
+        for (int j = 1; j <= ny; j++)
+        {
+            for (int k = 0; k <= nz; k++)
+            {
+                firstPartEquation = pow(xcenter - i, 2) + pow(ycenter - j, 2) + pow(zcenter - k, 2);
+                if (firstPartEquation <= pow(radius, 2))
+                {
+                    v[i][j][k].isOn = false;
+                }
+            }
+        }
+    }
+}
+// Ativa todos os voxels que satisfazem à equação da elipse e atribui aos mesmos a cor atual de desenho  (r,g,b,a)
+// Equação da elipse = x²/rx + y²/ry + z²/ry = 1
+void Sculptor::putEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int ry, int rz)
+{
+    int aux = 0;
+    int firstPartEquation = 0;
+    for (int i = 1; i <= nx; i++)
+    {
+        for (int j = 1; j <= ny; j++)
+        {
+            for (int k = 0; k <= nz; k++)
+            {
+                firstPartEquation = (pow(xcenter - i, 2) / pow(rx, 2)) + (pow(ycenter - j, 2) / pow(ry, 2)) + (pow(zcenter - k, 2) / pow(rz, 2));
+                if (firstPartEquation == 1)
+                {
+                    v[i][j][k].r = r;
+                    v[i][j][k].g = g;
+                    v[i][j][k].b = b;
+                    v[i][j][k].a = a;
+                    v[i][j][k].isOn = true;
+                }
+            }
+        }
+    }
+}
+
+void Sculptor::cutEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int ry, int rz)
+{
+    int aux = 0;
+    int firstPartEquation = 0;
+    for (int i = 1; i <= nx; i++)
+    {
+        for (int j = 1; j <= ny; j++)
+        {
+            for (int k = 0; k <= nz; k++)
+            {
+                firstPartEquation = (pow(xcenter - i, 2) / pow(rx, 2)) + (pow(ycenter - j, 2) / pow(ry, 2)) + (pow(zcenter - k, 2) / pow(rz, 2));
+                if (firstPartEquation == 1)
+                {
+                    v[i][j][k].isOn = false;
+                }
+            }
+        }
+    }
 }
 
 void Sculptor::putBox(int x0, int x1, int y0, int y1, int z0, int z1)
@@ -112,6 +221,53 @@ void Sculptor::putBox(int x0, int x1, int y0, int y1, int z0, int z1)
                 v[i][j][k].b = b;
                 v[i][j][k].a = a;
                 v[i][j][k].isOn = true;
+            }
+        }
+    }
+}
+
+void Sculptor::cutBox(int x0, int x1, int y0, int y1, int z0, int z1)
+{
+    int aux = 0;
+    //verificação se o intervalo está correto primeiro valor sendo o menor e o segundo sendo o maior, caso contrário a troca é efetuada
+    if (x0 > x1)
+    {
+        aux = x0;
+        x0 = x1;
+        x1 = aux;
+    }
+    if (y0 > y1)
+    {
+        aux = y0;
+        y0 = y1;
+        y1 = aux;
+    }
+    if (z0 > z1)
+    {
+        aux = z0;
+        z0 = z1;
+        z1 = aux;
+    }
+    if (x0 < 0)
+        x0 = 0;
+    if (x1 > nx)
+        x1 = nx - 1;
+    if (y0 < 0)
+        y0 = 0;
+    if (y1 > ny)
+        y1 = ny - 1;
+    if (z0 < 0)
+        z0 = 0;
+    if (z1 > nz)
+        z1 = nz - 1;
+    //coloca um voxel na posição passada (x,y,z) passando os valores de rgba atual e setando isOn verdadeiro
+    for (int i = x0; i <= x1; i++)
+    {
+        for (int j = y0; j <= y1; j++)
+        {
+            for (int k = z0; k <= z1; k++)
+            {
+                v[i][j][k].isOn = false;
             }
         }
     }
