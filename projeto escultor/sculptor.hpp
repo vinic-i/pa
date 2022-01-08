@@ -16,7 +16,7 @@ protected:
     int nx, ny, nz;   // Dimensions
     float r, g, b, a; // Current drawing color
 public:
-    Sculptor(int _nx, int _ny, int _nz);
+    Sculptor(int _nx=5, int _ny=5, int _nz=5);
     ~Sculptor();
     void setColor(float r, float g, float b, float alpha);
     void putVoxel(int x, int y, int z);

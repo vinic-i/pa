@@ -1,25 +1,23 @@
 #include "sculptor.hpp"
+#include <math.h>
 #include <iostream>
 #include <fstream>
 #include <iomanip>
-#include <math.h>
 using namespace std;
 
-Sculptor::Sculptor(int _nx, int _ny, int _nz)
+Sculptor::Sculptor(int x, int y, int z)
 {
-    nx = _nx;
-    ny = _ny;
-    nz = _nz;
-    r = 1.00;
-    g = 1.00;
-    b = 1.00;
-    a = 1.00;
-
-    cout << "Inicio da alocacao" << endl;
-    cout << "nx: " << nx << endl;
-    cout << "ny: " << ny << endl;
-    cout << "nz: " << nz << endl;
-
+    //inicializando dimensões da matriz
+    nx = x;
+    ny = y;
+    nz = z;
+    //inicializando cores/alpha
+    r = 1;
+    g = 1;
+    b = 1;
+    a = 0.7;
+    //preenchendo todos os voxeis com isOn = false para que não apareçam
+    //alocação de memoria
     v = new Voxel **[nx];
     for (int i = 0; i < nx; i++)
     {
@@ -33,13 +31,11 @@ Sculptor::Sculptor(int _nx, int _ny, int _nz)
             }
         }
     }
-
-    cout << "fim da alocacao" << endl;
 }
 
 Sculptor::~Sculptor()
 {
-
+    //limpando a memoria -> da parte mais externa para a mais interna
     for (int i = 0; i < nx; i++)
     {
         for (int j = 0; j < ny; j++)
@@ -48,67 +44,95 @@ Sculptor::~Sculptor()
         }
         delete[] v[i];
     }
-
     delete[] v;
-
-    cout << "delete V" << endl;
 }
 
-void Sculptor::setColor(float red, float green, float blue, float alpha)
+void Sculptor::setColor(float r1, float g1, float b1, float a1)
 {
-    r = red;
-    g = green;
-    b = blue;
-    a = alpha;
+    //seta rgba
+    r = r1;
+    g = g1;
+    b = b1;
+    a = a1;
 }
 
 void Sculptor::putVoxel(int x, int y, int z)
 {
-
-    //Ativa o voxel na posi��o (x,y,z),fazendo isOn = true e atribuindo a cor atual de desenho
-
-    v[x][y][z].isOn = true;
+    //coloca um voxel na posição passada (x,y,z) passando os valores de rgba atual e setando isOn verdadeiro
     v[x][y][z].r = r;
     v[x][y][z].g = g;
     v[x][y][z].b = b;
     v[x][y][z].a = a;
+    v[x][y][z].isOn = true;
 }
 
 void Sculptor::putBox(int x0, int x1, int y0, int y1, int z0, int z1)
 {
-
+    int aux = 0;
+    //verificação se o intervalo está correto primeiro valor sendo o menor e o segundo sendo o maior, caso contrário a troca é efetuada
+    if (x0 > x1)
+    {
+        aux = x0;
+        x0 = x1;
+        x1 = aux;
+    }
+    if (y0 > y1)
+    {
+        aux = y0;
+        y0 = y1;
+        y1 = aux;
+    }
+    if (z0 > z1)
+    {
+        aux = z0;
+        z0 = z1;
+        z1 = aux;
+    }
+    if (x0 < 0)
+        x0 = 0;
+    if (x1 > nx)
+        x1 = nx - 1;
+    if (y0 < 0)
+        y0 = 0;
+    if (y1 > ny)
+        y1 = ny - 1;
+    if (z0 < 0)
+        z0 = 0;
+    if (z1 > nz)
+        z1 = nz - 1;
+    //preenchendo o intervalo com os voxeis
     for (int i = x0; i <= x1; i++)
     {
         for (int j = y0; j <= y1; j++)
         {
             for (int k = z0; k <= z1; k++)
             {
-                v[i][j][k].isOn = true;
                 v[i][j][k].r = r;
                 v[i][j][k].g = g;
                 v[i][j][k].b = b;
                 v[i][j][k].a = a;
+                v[i][j][k].isOn = true;
             }
         }
     }
 }
 
-void Sculptor::writeOFF(char *filename)
+void Sculptor::writeOFF(char *fileName)
 {
-    cout << "Arquivo" << endl;
-    ofstream arquivo;
-    arquivo.open(filename);
-
-    if (arquivo.is_open() == true)
+    //cria um arquivo
+    ofstream file;
+    //abre o arquivo e nomeia
+    file.open(fileName);
+    //confere se o arquivo foi criado e aberto
+    if (file.is_open() == true)
     {
-        cout << "Iniciando" << endl;
+        cout << "file opened" << endl;
     }
+    //escreve o tipo do arquivo na primeira linha
+    file << "OFF" << endl;
 
-    arquivo << "OFF" << endl;
-
-    int numeros_Vox = 0;
-    int numeros_Face = 0;
-
+    int nVox = 0;
+    int nFaces = 0;
     for (int i = 0; i < nx; i++)
     {
         for (int j = 0; j < ny; j++)
@@ -117,14 +141,15 @@ void Sculptor::writeOFF(char *filename)
             {
                 if (v[i][j][k].isOn == true)
                 {
-                    numeros_Vox++;
+                    nVox++;
                 }
             }
         }
     }
-
-    arquivo << 8 * numeros_Vox << " " << 6 * numeros_Vox << " " << 0 << endl;
-
+    //escreve a quantidade de vertice - faces - arestas, porém as areastas não precisa pois o geomview calcula sozinho
+    file << 8 * nVox << " " << 6 * nVox << " " << 0 << endl;
+    // usando os parâmetros de um cubo padrão de tamanho 1 como base:
+    // setando as linhas do arquivo que corresponde as cordenadas de cada vértice
     for (int i = 0; i < nx; i++)
     {
         for (int j = 0; j < ny; j++)
@@ -133,20 +158,20 @@ void Sculptor::writeOFF(char *filename)
             {
                 if (v[i][j][k].isOn == true)
                 {
-                    arquivo << -0.5 + i << " " << 0.5 + j << " " << -0.5 + k << endl;
-                    arquivo << -0.5 + i << " " << -0.5 + j << " " << -0.5 + k << endl;
-                    arquivo << 0.5 + i << " " << -0.5 + j << " " << -0.5 + k << endl;
-                    arquivo << 0.5 + i << " " << 0.5 + j << " " << -0.5 + k << endl;
-                    arquivo << -0.5 + i << " " << 0.5 + j << " " << 0.5 + k << endl;
-                    arquivo << -0.5 + i << " " << -0.5 + j << " " << 0.5 + k << endl;
-                    arquivo << 0.5 + i << " " << -0.5 + j << " " << 0.5 + k << endl;
-                    arquivo << 0.5 + i << " " << 0.5 + j << " " << 0.5 + k << endl;
+                    file << -0.5 + i << " " << 0.5 + j << " " << -0.5 + k << endl;
+                    file << -0.5 + i << " " << -0.5 + j << " " << -0.5 + k << endl;
+                    file << 0.5 + i << " " << -0.5 + j << " " << -0.5 + k << endl;
+                    file << 0.5 + i << " " << 0.5 + j << " " << -0.5 + k << endl;
+                    file << -0.5 + i << " " << 0.5 + j << " " << 0.5 + k << endl;
+                    file << -0.5 + i << " " << -0.5 + j << " " << 0.5 + k << endl;
+                    file << 0.5 + i << " " << -0.5 + j << " " << 0.5 + k << endl;
+                    file << 0.5 + i << " " << 0.5 + j << " " << 0.5 + k << endl;
                 }
             }
         }
     }
-
-    arquivo << fixed << setprecision(2); // numeros floats vão sair com 2 casa
+    // setando as linhas do arquivo que representam uma face do voxel cada
+    file << fixed << setprecision(1);
     for (int i = 0; i < nx; i++)
     {
         for (int j = 0; j < ny; j++)
@@ -155,17 +180,22 @@ void Sculptor::writeOFF(char *filename)
             {
                 if (v[i][j][k].isOn == true)
                 {
-                    arquivo << "4 " << 0 + numeros_Face * 8 << " " << 3 + numeros_Face * 8 << " " << 2 + numeros_Face * 8 << " " << 1 + numeros_Face * 8 << " " << v[i][j][k].r << " " << v[i][j][k].g << " " << v[i][j][k].b << " " << v[i][j][k].a << endl
-                            << "4 " << 4 + numeros_Face * 8 << " " << 5 + numeros_Face * 8 << " " << 6 + numeros_Face * 8 << " " << 7 + numeros_Face * 8 << " " << v[i][j][k].r << " " << v[i][j][k].g << " " << v[i][j][k].b << " " << v[i][j][k].a << endl
-                            << "4 " << 0 + numeros_Face * 8 << " " << 1 + numeros_Face * 8 << " " << 5 + numeros_Face * 8 << " " << 4 + numeros_Face * 8 << " " << v[i][j][k].r << " " << v[i][j][k].g << " " << v[i][j][k].b << " " << v[i][j][k].a << endl
-                            << "4 " << 0 + numeros_Face * 8 << " " << 4 + numeros_Face * 8 << " " << 7 + numeros_Face * 8 << " " << 3 + numeros_Face * 8 << " " << v[i][j][k].r << " " << v[i][j][k].g << " " << v[i][j][k].b << " " << v[i][j][k].a << endl
-                            << "4 " << 3 + numeros_Face * 8 << " " << 7 + numeros_Face * 8 << " " << 6 + numeros_Face * 8 << " " << 2 + numeros_Face * 8 << " " << v[i][j][k].r << " " << v[i][j][k].g << " " << v[i][j][k].b << " " << v[i][j][k].a << endl
-                            << "4 " << 1 + numeros_Face * 8 << " " << 2 + numeros_Face * 8 << " " << 6 + numeros_Face * 8 << " " << 5 + numeros_Face * 8 << " " << v[i][j][k].r << " " << v[i][j][k].g << " " << v[i][j][k].b << " " << v[i][j][k].a << endl;
-                    numeros_Face++;
+                    file << "4 " << 0 + nFaces * 8 << " " << 3 + nFaces * 8 << " " << 2 + nFaces * 8 << " " << 1 + nFaces * 8 << " " << v[i][j][k].r << " " << v[i][j][k].g << " " << v[i][j][k].b << " " << v[i][j][k].a << endl
+                         << "4 " << 4 + nFaces * 8 << " " << 5 + nFaces * 8 << " " << 6 + nFaces * 8 << " " << 7 + nFaces * 8 << " " << v[i][j][k].r << " " << v[i][j][k].g << " " << v[i][j][k].b << " " << v[i][j][k].a << endl
+                         << "4 " << 0 + nFaces * 8 << " " << 1 + nFaces * 8 << " " << 5 + nFaces * 8 << " " << 4 + nFaces * 8 << " " << v[i][j][k].r << " " << v[i][j][k].g << " " << v[i][j][k].b << " " << v[i][j][k].a << endl
+                         << "4 " << 0 + nFaces * 8 << " " << 4 + nFaces * 8 << " " << 7 + nFaces * 8 << " " << 3 + nFaces * 8 << " " << v[i][j][k].r << " " << v[i][j][k].g << " " << v[i][j][k].b << " " << v[i][j][k].a << endl
+                         << "4 " << 3 + nFaces * 8 << " " << 7 + nFaces * 8 << " " << 6 + nFaces * 8 << " " << 2 + nFaces * 8 << " " << v[i][j][k].r << " " << v[i][j][k].g << " " << v[i][j][k].b << " " << v[i][j][k].a << endl
+                         << "4 " << 1 + nFaces * 8 << " " << 2 + nFaces * 8 << " " << 6 + nFaces * 8 << " " << 5 + nFaces * 8 << " " << v[i][j][k].r << " " << v[i][j][k].g << " " << v[i][j][k].b << " " << v[i][j][k].a << endl;
+                    nFaces++;
                 }
             }
         }
     }
 
-    arquivo.close();
+    file.close();
 }
+
+// referencias
+// https://stackoverflow.com/questions/1403150/how-do-you-dynamically-allocate-a-matrix
+// https://www.youtube.com/user/agostinhobritojr/playlists
+// https://stackoverflow.com/questions/70221264/how-do-i-set-the-precision-of-a-float-variable-in-c
