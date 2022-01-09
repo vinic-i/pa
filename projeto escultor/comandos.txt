@@ -1,4 +1,0 @@
-g++ -c main.cpp
-g++ -c sculptor.cpp
-
-g++ sculptor.o main.o -o name
