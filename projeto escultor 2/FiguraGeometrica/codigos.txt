@@ -11,4 +11,5 @@ g++ -c putSphere.cpp
 g++ -c cutEllipsoid.cpp
 g++ -c putEllipsoid.cpp
 
-g++ main.o sculptor.o FiguraGeometrica.o interpretador.o cutBox.o putBox.o cutVoxel.o putVoxel.o cutSphere.o putSphere.o cutEllipsoid.o putEllipsoid.o -o name
+g++ main.o sculptor.o FiguraGeometrica.o interpretador.o cutBox.o putBox.o cutVoxel.o putVoxel.o cutSphere.o putSphere.o cutEllipsoid.o putEllipsoid.o -o name2
+./name2

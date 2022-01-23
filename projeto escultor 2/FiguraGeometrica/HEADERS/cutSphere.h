@@ -7,8 +7,9 @@ class cutSphere : public FiguraGeometrica
 {
     int xcenter, ycenter, zcenter;
     int radius;
+    int nx, ny, nz;
     public:
-        cutSphere(int xcenter, int ycenter, int zcenter, int radius);
+        cutSphere(int xcenter, int ycenter, int zcenter, int radius, int nx, int ny, int nz);
         ~cutSphere();
         void draw(Sculptor &s);
 };

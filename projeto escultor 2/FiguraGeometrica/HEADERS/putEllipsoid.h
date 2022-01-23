@@ -5,19 +5,14 @@
 
 class putEllipsoid : public FiguraGeometrica
 {
-    /**
-     * @brief Coordenadas do centro do Elipsoide.
-     */
     int xcenter, ycenter, zcenter;
-    /**
-     * @brief Valores dos raios do Elipsoide.
-     */
-    int rx,ry,rz;
-    public:
-        putEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int ry, int rz, float r, float g, float b, float a);
-        ~putEllipsoid();
-        void draw(Sculptor &s);
+    int rx, ry, rz;
+    int nx, ny, nz;
 
+public:
+    putEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int ry, int rz, int nx, int ny, int nz, float r, float g, float b, float a);
+    ~putEllipsoid();
+    void draw(Sculptor &s);
 };
 
 #endif // PUTELLIPSOID_H

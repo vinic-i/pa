@@ -21,7 +21,11 @@ Sculptor::Sculptor(int x, int y, int z)
     nx = x;
     ny = y;
     nz = z;
-
+    //inicializando cores/alpha
+    r = 0;
+    g = 0;
+    b = 0;
+    a = 0;
     v = new Voxel **[nx];
     for (int i = 0; i < nx; i++)
     {
@@ -129,78 +133,83 @@ void Sculptor::limpaVoxels()
 
 void Sculptor::writeOFF(char *filename)
 {
-    //cria um arquivo
-    ofstream file;
-    //abre o arquivo e nomeia
-    file.open(filename);
-    //confere se o arquivo foi criado e aberto
-    if (file.is_open() == true)
+    // ESCREVENDO O ARQUIVO .OFF
+    int total, faces, nv, nf;
+    int x, y, z;
+    ofstream f(filename);
+    total = 0;
+    f << "OFF\n";
+    for (x = 0; x < nx; x++)
     {
-        cout << "file opened" << endl;
-    }
-    //escreve o tipo do arquivo na primeira linha
-    file << "OFF" << endl;
-
-    int nVox = 0;
-    int nFaces = 0;
-    for (int i = 0; i < nx; i++)
-    {
-        for (int j = 0; j < ny; j++)
+        for (y = 0; y < ny; y++)
         {
-            for (int k = 0; k < nz; k++)
+            for (z = 0; z < nz; z++)
             {
-                if (v[i][j][k].isOn == true)
+                if (v[x][y][z].isOn == true)
                 {
-                    nVox++;
+                    total++;
                 }
             }
         }
     }
-    //escreve a quantidade de vertice - faces - arestas, porém as areastas não precisa pois o geomview calcula sozinho
-    file << 8 * nVox << " " << 6 * nVox << " " << 0 << endl;
-    // usando os parâmetros de um cubo padrão de tamanho 1 como base:
-    // setando as linhas do arquivo que corresponde as cordenadas de cada vértice
-    for (int i = 0; i < nx; i++)
+    nv = 8 * total;
+    nf = 6 * total;
+    faces = 0;
+    f << nv << " " << nf << " 0 \n";
+    for (x = 0; x < nx; x++)
     {
-        for (int j = 0; j < ny; j++)
+        for (y = 0; y < ny; y++)
         {
-            for (int k = 0; k < nz; k++)
+            for (z = 0; z < nz; z++)
             {
-                if (v[i][j][k].isOn == true)
+                if ((v[x][y][z].isOn == true))
                 {
-                    file << -0.5 + i << " " << 0.5 + j << " " << -0.5 + k << endl;
-                    file << -0.5 + i << " " << -0.5 + j << " " << -0.5 + k << endl;
-                    file << 0.5 + i << " " << -0.5 + j << " " << -0.5 + k << endl;
-                    file << 0.5 + i << " " << 0.5 + j << " " << -0.5 + k << endl;
-                    file << -0.5 + i << " " << 0.5 + j << " " << 0.5 + k << endl;
-                    file << -0.5 + i << " " << -0.5 + j << " " << 0.5 + k << endl;
-                    file << 0.5 + i << " " << -0.5 + j << " " << 0.5 + k << endl;
-                    file << 0.5 + i << " " << 0.5 + j << " " << 0.5 + k << endl;
-                }
-            }
-        }
-    }
-    // setando as linhas do arquivo que representam uma face do voxel cada
-    file << fixed << setprecision(1);
-    for (int i = 0; i < nx; i++)
-    {
-        for (int j = 0; j < ny; j++)
-        {
-            for (int k = 0; k < nz; k++)
-            {
-                if (v[i][j][k].isOn == true)
-                {
-                    file << "4 " << 0 + nFaces * 8 << " " << 3 + nFaces * 8 << " " << 2 + nFaces * 8 << " " << 1 + nFaces * 8 << " " << v[i][j][k].r << " " << v[i][j][k].g << " " << v[i][j][k].b << " " << v[i][j][k].a << endl
-                         << "4 " << 4 + nFaces * 8 << " " << 5 + nFaces * 8 << " " << 6 + nFaces * 8 << " " << 7 + nFaces * 8 << " " << v[i][j][k].r << " " << v[i][j][k].g << " " << v[i][j][k].b << " " << v[i][j][k].a << endl
-                         << "4 " << 0 + nFaces * 8 << " " << 1 + nFaces * 8 << " " << 5 + nFaces * 8 << " " << 4 + nFaces * 8 << " " << v[i][j][k].r << " " << v[i][j][k].g << " " << v[i][j][k].b << " " << v[i][j][k].a << endl
-                         << "4 " << 0 + nFaces * 8 << " " << 4 + nFaces * 8 << " " << 7 + nFaces * 8 << " " << 3 + nFaces * 8 << " " << v[i][j][k].r << " " << v[i][j][k].g << " " << v[i][j][k].b << " " << v[i][j][k].a << endl
-                         << "4 " << 3 + nFaces * 8 << " " << 7 + nFaces * 8 << " " << 6 + nFaces * 8 << " " << 2 + nFaces * 8 << " " << v[i][j][k].r << " " << v[i][j][k].g << " " << v[i][j][k].b << " " << v[i][j][k].a << endl
-                         << "4 " << 1 + nFaces * 8 << " " << 2 + nFaces * 8 << " " << 6 + nFaces * 8 << " " << 5 + nFaces * 8 << " " << v[i][j][k].r << " " << v[i][j][k].g << " " << v[i][j][k].b << " " << v[i][j][k].a << endl;
-                    nFaces++;
+                    f << -0.5 + x << " " << 0.5 + y << " " << -0.5 + z << endl;
+                    f << -0.5 + x << " " << -0.5 + y << " " << -0.5 + z << endl;
+                    f << 0.5 + x << " " << -0.5 + y << " " << -0.5 + z << endl;
+                    f << 0.5 + x << " " << 0.5 + y << " " << -0.5 + z << endl;
+                    f << -0.5 + x << " " << 0.5 + y << " " << 0.5 + z << endl;
+                    f << -0.5 + x << " " << -0.5 + y << " " << 0.5 + z << endl;
+                    f << 0.5 + x << " " << -0.5 + y << " " << 0.5 + z << endl;
+                    f << 0.5 + x << " " << 0.5 + y << " " << 0.5 + z << endl;
                 }
             }
         }
     }
 
-    file.close();
+    for (x = 0; x < nx; x++)
+    {
+        for (y = 0; y < ny; y++)
+        {
+            for (z = 0; z < nz; z++)
+            {
+                if ((v[x][y][z].isOn == true))
+                {
+                    f << 4 << " " << 0 + faces << " " << 3 + faces << " " << 2 + faces << " " << 1 + faces << " "
+                      << v[x][y][z].r << " " << v[x][y][z].g << " " << v[x][y][z].b << " " << v[x][y][z].a << endl
+                      << 4 << " " << 4 + faces << " " << 5 + faces << " " << 6 + faces << " " << 7 + faces << " "
+                      << v[x][y][z].r << " " << v[x][y][z].g << " " << v[x][y][z].b << " " << v[x][y][z].a << endl
+                      << 4 << " " << 0 + faces << " " << 1 + faces << " " << 5 + faces << " " << 4 + faces << " "
+                      << v[x][y][z].r << " " << v[x][y][z].g << " " << v[x][y][z].b << " " << v[x][y][z].a << endl
+                      << 4 << " " << 0 + faces << " " << 4 + faces << " " << 7 + faces << " " << 3 + faces << " "
+                      << v[x][y][z].r << " " << v[x][y][z].g << " " << v[x][y][z].b << " " << v[x][y][z].a << endl
+                      << 4 << " " << 3 + faces << " " << 7 + faces << " " << 6 + faces << " " << 2 + faces << " "
+                      << v[x][y][z].r << " " << v[x][y][z].g << " " << v[x][y][z].b << " " << v[x][y][z].a << endl
+                      << 4 << " " << 1 + faces << " " << 2 + faces << " " << 6 + faces << " " << 5 + faces << " "
+                      << v[x][y][z].r << " " << v[x][y][z].g << " " << v[x][y][z].b << " " << v[x][y][z].a << endl;
+                    faces = faces + 8;
+                }
+            }
+        }
+    }
+
+    total = 0;
+    f.close();
+    std::string file;
+    std::ifstream MyReadFile("Vida.off");
+    while (getline(MyReadFile, file))
+    {
+        std::cout << file;
+    }
+    MyReadFile.close();
 }

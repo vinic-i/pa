@@ -5,16 +5,10 @@
 
 class putVoxel : public FiguraGeometrica
 {
-    /**
-    * @brief Posicoes do voxel.
-    */
     int x,y,z;
 
     public:
         putVoxel(int x, int y, int z, float r, float g, float b, float a);
-        /**
-        * @brief Destrutor da funcao putVoxel
-        */
         ~putVoxel(){};
         void draw(Sculptor &s);
 };

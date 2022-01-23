@@ -11,12 +11,12 @@ class putBox : public FiguraGeometrica
     int y1;
     int z0;
     int z1;
+    int nx, ny, nz;
 
-    public:
-        putBox(int x0, int x1, int y0, int y1, int z0, int z1, float r, float g, float b, float a);
-        ~putBox(){};
-        void draw(Sculptor &s);
-
+public:
+    putBox(int x0, int x1, int y0, int y1, int z0, int z1, int nx, int ny, int nz, float r, float g, float b, float a);
+    ~putBox(){};
+    void draw(Sculptor &s);
 };
 
 #endif // PUTBOX_H
