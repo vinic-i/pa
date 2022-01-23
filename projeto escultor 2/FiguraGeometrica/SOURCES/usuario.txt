@@ -1,0 +1,38 @@
+dim 101 101 101
+putsphere 50 80 50 30 0.8 0.1 0.1 0.99
+putsphere 50 88 80 14 0.9 0.9 0.9 0.99
+putsphere 80 88 50 14
+putsphere 20 88 50 14
+putsphere 50 88 20 14
+putsphere 50 102 50 14
+outsphere 50 80 50 30
+outsphere 50 100 50 40
+cutsphere 50 47 50 32
+putellipsoid 25 34 25 10 7 7 0.57 0.53 0.49 0.99
+putbox 21 22 32 37 31 32 0 0 0 1
+putbox 29 30 32 37 31 32
+putbox 16 35 14 29 15 37 
+putbox 16 25 15 19 32 37 0.55 0.3 0.001 0.99
+putbox 26 34 15 19 32 37
+putbox 16 25 15 19 15 20
+putbox 26 34 15 19 15 20
+putbox 16 21 15 19 21 31
+putbox 26 35 15 19 32 37
+putbox 26 35 15 19 15 20
+putbox 26 35 15 19 21 31
+putbox 16 22 20 24 27 37
+putbox 30 35 20 24 27 37
+putbox 16 22 20 24 16 26
+putbox 30 35 20 24 16 26
+putbox 23 29 20 24 32 37
+putbox 16 22 20 24 15 25
+putbox 23 29 20 24 15 25
+putbox 30 35 20 24 15 25
+putbox 16 25 25 29 32 37
+putbox 26 34 25 29 32 37
+putbox 16 25 25 29 15 20
+putbox 26 34 25 29 15 20
+putbox 16 25 25 29 21 31
+putbox 26 35 25 29 32 37
+putbox 26 35 25 29 15 20
+putbox 26 35 25 29 21 31
