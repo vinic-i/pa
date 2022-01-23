@@ -3,7 +3,7 @@
 
 typedef struct{
     float r,g,b,a;
-    bool is0n;
+    bool isOn;
 }Voxel;
 
 typedef struct{

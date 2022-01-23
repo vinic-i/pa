@@ -33,7 +33,7 @@ int main()
     }
     s1->limpaVoxels();
 
-    s1->writeOFF((char *)"usuario23.off");
+    s1->writeOFF((char *)"usuario234.off");
     for (size_t i = 0; i < figs.size(); i++)
     {
         delete s1;
