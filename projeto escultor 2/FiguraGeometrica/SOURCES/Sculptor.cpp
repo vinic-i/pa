@@ -43,15 +43,13 @@ Sculptor::Sculptor(int x, int y, int z)
 
 Sculptor::~Sculptor()
 {
-    //limpando a memoria -> da parte mais externa para a mais interna
-    for (int i = 0; i < nx; i++)
+    //DESTRUTOR DA CLASSE
+    if (nx == 0 || ny == 0 || nz == 0)
     {
-        for (int j = 0; j < ny; j++)
-        {
-            delete[] v[i][j];
-        }
-        delete[] v[i];
+        return;
     }
+    delete[] v[0][0];
+    delete[] v[0];
     delete[] v;
 }
 

@@ -31,7 +31,6 @@ int main()
     {
         figs[i]->draw(*s1);
     }
-    s1->limpaVoxels();
 
     s1->writeOFF((char *)"teste1.off");
     for (size_t i = 0; i < figs.size(); i++)
