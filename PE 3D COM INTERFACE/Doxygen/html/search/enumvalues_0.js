@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['xy',['XY',['../sculptor_8h.html#a06fc87d81c62e9abb8790b6e5713c55ba0e35228e79b7d412f3c0ba4d49646ef5',1,'sculptor.h']]],
+  ['xz',['XZ',['../sculptor_8h.html#a06fc87d81c62e9abb8790b6e5713c55ba17598f0f134bb1b6c20e07f7ad30bc99',1,'sculptor.h']]]
+];

@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>box.png</file>
+        <file>cutBox.png</file>
+        <file>cutElipse.png</file>
+        <file>cutSphere.png</file>
+        <file>cutVoxel.png</file>
+        <file>elipse.png</file>
+        <file>fotoefeitos.com_ (1).jpg</file>
+        <file>sphere.png</file>
+        <file>voxel.png</file>
+    </qresource>
+</RCC>
